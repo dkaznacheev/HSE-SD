@@ -16,7 +16,7 @@ class CliRunner(input: InputStream, private val output: PrintStream) {
     private val parser = CliParser(context)
 
     /*
-        Runs the assignment command.
+
      */
     private fun runAssignment(variable: String, value: String) {
         context[variable] = value

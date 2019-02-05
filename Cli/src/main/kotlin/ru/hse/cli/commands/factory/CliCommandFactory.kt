@@ -19,6 +19,9 @@ object CliCommandFactory {
 
     //factory method for creating commands
     fun createCliCommand(name: String, args: List<String>): CliCommand {
-        return commandConstructors.getOrDefault(name, ::createExternalCommand).invoke(args)
+        return if (name in commandConstructors)
+            commandConstructors.getValue(name).invoke(args)
+        else
+            createExternalCommand(listOf(name) + args)
     }
 }
