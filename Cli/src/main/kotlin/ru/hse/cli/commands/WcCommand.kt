@@ -2,7 +2,7 @@ package ru.hse.cli.commands
 
 import ru.hse.cli.commands.factory.CliCommandFactory
 
-
+// wc command counts lines, words and bytes of input or a file from arguments if there was no input.
 class WcCommand private constructor(args: List<String>) : CliCommand(args) {
     override fun getName() = "wc"
 

@@ -1,5 +1,6 @@
 package ru.hse.cli.commands
 
+//echo writes all its argument to output
 class EchoCommand private constructor(args: List<String>) : CliCommand(args) {
     override fun getName() = "echo"
 

@@ -7,8 +7,15 @@ import ru.hse.cli.parser.exceptions.EmptyCommandException
 import ru.hse.cli.parser.exceptions.QuotesNotClosedException
 import java.lang.StringBuilder
 
+/*
+    Class for parsing lines from command line.
+    Uses context for storing variables.
+ */
 class CliParser(private val context: Map<String, String>) {
 
+    /*
+        Expands unescaped variables in tokens.
+     */
     private fun expand(token: String): String {
         val result = StringBuilder()
 
@@ -77,9 +84,14 @@ class CliParser(private val context: Map<String, String>) {
             val key = token.substring(startDollar, token.length)
             result.append(context.getOrDefault(key, ""))
         }
+        if (escapedDouble or escapedSingle)
+            throw QuotesNotClosedException()
         return result.toString()
     }
 
+    /*
+        Checks whether the line is an assignment
+     */
     private fun isAssignment(tokens: List<String>): Boolean {
         if (tokens.size != 1)
             return false
@@ -89,6 +101,10 @@ class CliParser(private val context: Map<String, String>) {
         return true
     }
 
+    /*
+        Splits line into tokens by unescaped pipe symbols.
+        Example: (echo "|" | cat) produces [echo "|", cat]
+     */
     private fun splitByUnescaped(line: String): List<String> {
         var escapedSingle = false
         var escapedDouble = false
@@ -127,6 +143,21 @@ class CliParser(private val context: Map<String, String>) {
         return result
     }
 
+    /*
+        Parses a command from a token.
+     */
+    private fun parseCommand(input: String): CliCommand {
+        val tokens = input.trim().split(' ')
+        if (tokens.isEmpty())
+            throw EmptyCommandException()
+        val name = tokens.first()
+        val args = tokens.drop(1)
+        return CliCommandFactory.createCliCommand(name, args)
+    }
+
+    /*
+        Parses a token and returns either an assignment or a list of commands in a pipeline
+     */
     fun parseLine(line: String): Line {
         val tokens = splitByUnescaped(line)
             .map{ expand(it) }
@@ -138,14 +169,4 @@ class CliParser(private val context: Map<String, String>) {
 
         return Line.Pipeline(tokens.map{ parseCommand(it) })
     }
-
-    private fun parseCommand(input: String): CliCommand {
-        val tokens = input.trim().split(' ')
-        if (tokens.isEmpty())
-            throw EmptyCommandException()
-        val name = tokens.first()
-        val args = tokens.drop(1)
-        return CliCommandFactory.createCliCommand(name, args)
-    }
-
 }

@@ -8,6 +8,8 @@ import ru.hse.cli.commands.ExternalCommand.Companion.createExternalCommand
 import ru.hse.cli.commands.WcCommand.Companion.createWcCommand
 
 object CliCommandFactory {
+
+    // map from command names to command constructors
     private val commandConstructors = mapOf<String, (List<String>)-> CliCommand>(
         "cat" to ::createCatCommand,
         "echo" to ::createEchoCommand,
@@ -15,6 +17,7 @@ object CliCommandFactory {
         "wc" to ::createWcCommand
     )
 
+    //factory method for creating commands
     fun createCliCommand(name: String, args: List<String>): CliCommand {
         return commandConstructors.getOrDefault(name, ::createExternalCommand).invoke(args)
     }

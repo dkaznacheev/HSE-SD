@@ -1,5 +1,6 @@
 package ru.hse.cli.commands
 
+//external command call
 class ExternalCommand private constructor(args: List<String>) : CliCommand(args) {
     override fun getName() = ""
 
