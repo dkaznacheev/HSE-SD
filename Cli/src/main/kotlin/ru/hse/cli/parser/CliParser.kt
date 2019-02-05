@@ -9,7 +9,7 @@ import java.lang.StringBuilder
 
 class CliParser(private val context: Map<String, String>) {
 
-    fun expand(token: String): String {
+    private fun expand(token: String): String {
         val result = StringBuilder()
 
         var escapedSingle = false
@@ -142,8 +142,4 @@ class CliParser(private val context: Map<String, String>) {
         return CliCommandFactory.createCliCommand(name, args)
     }
 
-}
-
-fun main() {
-    println(CliParser(mapOf("a" to "\$A")).expand("echo \$a"))
 }

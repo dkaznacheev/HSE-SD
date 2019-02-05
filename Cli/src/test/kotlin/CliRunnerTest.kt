@@ -11,7 +11,7 @@ class CliRunnerTest {
 
     @Test
     fun testEcho() {
-        val input = "echo a | cat | cat"
+        val input = "echo \$a | cat | cat"
         val istream = ByteArrayInputStream(input.toByteArray(Charsets.UTF_8))
         CliRunner(istream, System.out).run()
     }

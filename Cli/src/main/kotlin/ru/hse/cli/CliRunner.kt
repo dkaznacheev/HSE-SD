@@ -17,9 +17,9 @@ class CliRunner(input: InputStream, private val output: PrintStream) {
         context[variable] = value
     }
 
-    private fun runCommands(pipeline: List<CliCommand>) {
-        /*if (pipeline.size == 1 && pipeline.first().getName() == "exit")
-            return
+    private fun runCommands(pipeline: List<CliCommand>): Boolean {
+        if (pipeline.size == 1 && pipeline.first().getName() == "exit")
+            return true
 
         var buffer: String? = null
         for (command in pipeline) {
@@ -27,8 +27,7 @@ class CliRunner(input: InputStream, private val output: PrintStream) {
         }
 
         output.println(buffer)
-        */
-        pipeline.forEach { println(it.getName()) }
+        return false
     }
 
     fun run() {
@@ -36,14 +35,20 @@ class CliRunner(input: InputStream, private val output: PrintStream) {
         while (line != null) {
             val parsedLine = parser.parseLine(line)
             when(parsedLine) {
-                is Line.Pipeline -> runCommands(parsedLine.commands)
+                is Line.Pipeline -> {
+                    if(runCommands(parsedLine.commands))
+                        return
+                }
                 is Line.Assignment -> runAssignment(parsedLine.variable, parsedLine.value)
             }
 
             line = reader.readLine()
         }
+
     }
+
 }
 
 fun main() {
+    CliRunner(System.`in`, System.out).run()
 }

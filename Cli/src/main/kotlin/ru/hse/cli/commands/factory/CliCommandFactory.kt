@@ -5,12 +5,14 @@ import ru.hse.cli.commands.CliCommand
 import ru.hse.cli.commands.EchoCommand.Companion.createEchoCommand
 import ru.hse.cli.commands.ExitCommand.Companion.createExitCommand
 import ru.hse.cli.commands.ExternalCommand.Companion.createExternalCommand
+import ru.hse.cli.commands.WcCommand.Companion.createWcCommand
 
 object CliCommandFactory {
     private val commandConstructors = mapOf<String, (List<String>)-> CliCommand>(
         "cat" to ::createCatCommand,
         "echo" to ::createEchoCommand,
-        "exit" to ::createExitCommand
+        "exit" to ::createExitCommand,
+        "wc" to ::createWcCommand
     )
 
     fun createCliCommand(name: String, args: List<String>): CliCommand {
