@@ -1,10 +1,15 @@
 import org.junit.Test
 import org.junit.Assert.assertEquals
-import ru.hse.cli.commands.EchoCommand
+import ru.hse.cli.commands.CliCommandFactory
 
 class CliCommandTest {
     @Test
     fun testEcho() {
-        assertEquals("a b c", EchoCommand().execute(listOf("a", "b", "c")))
+        val echo = CliCommandFactory.createCliCommand("echo", listOf("a", "b", "c"), null)
+        assertEquals("a b c", echo.execute())
+    }
+
+    @Test
+    fun testCat() {
     }
 }
