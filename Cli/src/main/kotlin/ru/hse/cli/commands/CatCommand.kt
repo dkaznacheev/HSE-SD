@@ -2,10 +2,10 @@ package ru.hse.cli.commands
 
 import java.io.File
 
-class CatCommand private constructor(args: List<String>, input: String?) : CliCommand(args, input) {
+class CatCommand private constructor(args: List<String>) : CliCommand(args) {
     override fun getName() = "cat"
 
-    override fun execute(): String {
+    override fun execute(input: String?): String {
         if (args.isNotEmpty())
             return args.joinToString("\n") { name ->
                 val file = File(name)
@@ -20,6 +20,6 @@ class CatCommand private constructor(args: List<String>, input: String?) : CliCo
     }
 
     companion object {
-        fun createCatCommand(args: List<String>, input: String?) = CatCommand(args, input)
+        fun createCatCommand(args: List<String>) = CatCommand(args)
     }
 }
