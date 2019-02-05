@@ -34,6 +34,12 @@ class CliParser(private val context: Map<String, String>) {
                     }
                 }
                 '\'' -> {
+                    if (inDollar) {
+                        val key = token.substring(startDollar, i)
+                        result.append(context.getOrDefault(key, ""))
+                        inDollar = false
+                    }
+
                     if (!escapedDouble) {
                         escapedSingle = !escapedSingle
                     } else {

@@ -12,7 +12,7 @@ class WcCommand private constructor(args: List<String>) : CliCommand(args) {
 
     override fun execute(input: String?): String {
         val wcInput = input ?: loadFiles()
-        val newlines = wcInput.count { it == '\n' }
+        val newlines = wcInput.count { it == '\n' } + 1
         val words = wcInput.replace('\n', ' ').split(' ').size
         val bytes = wcInput.toByteArray().size
         return  "$newlines".padStart(8) +
@@ -24,4 +24,3 @@ class WcCommand private constructor(args: List<String>) : CliCommand(args) {
         fun createWcCommand(args: List<String>) = WcCommand(args)
     }
 }
-//padstart 8
