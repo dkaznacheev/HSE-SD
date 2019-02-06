@@ -1,12 +1,13 @@
 package ru.hse.cli.commands
 
+import ru.hse.cli.Context
 import java.io.File
 
 // cat concatenates all files from arguments or redirects input to output if there are no arguments
 class CatCommand private constructor(args: List<String>) : CliCommand(args) {
     override fun getName() = "cat"
 
-    override fun execute(input: String?): String {
+    override fun execute(input: String?, context: Context): String {
         if (args.isNotEmpty())
             return args.joinToString("\n") { name ->
                 val file = File(name)

@@ -1,5 +1,6 @@
 package ru.hse.cli.commands
 
+import ru.hse.cli.Context
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
@@ -7,7 +8,7 @@ import java.util.concurrent.TimeUnit
 class ExternalCommand private constructor(args: List<String>) : CliCommand(args) {
     override fun getName() = ""
 
-    override fun execute(input: String?): String {
+    override fun execute(input: String?, context: Context): String {
         return try {
             val proc = ProcessBuilder(args)
                 .redirectInput(ProcessBuilder.Redirect.PIPE)

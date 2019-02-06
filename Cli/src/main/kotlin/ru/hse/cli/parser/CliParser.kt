@@ -1,9 +1,11 @@
 package ru.hse.cli.parser
 
 import ru.hse.cli.Context
-import ru.hse.cli.Line
+import ru.hse.cli.lines.Line
 import ru.hse.cli.commands.CliCommand
 import ru.hse.cli.commands.factory.CliCommandFactory
+import ru.hse.cli.lines.Assignment
+import ru.hse.cli.lines.Pipeline
 import ru.hse.cli.parser.exceptions.EmptyCommandException
 import ru.hse.cli.parser.exceptions.QuotesNotClosedException
 import java.lang.StringBuilder
@@ -13,7 +15,7 @@ import java.lang.StringBuilder
     Uses vars for storing variables.
  */
 class CliParser(context: Context) {
-    val vars = context.vars
+    private val vars = context.vars
 
     /*
         Expands unescaped variables in tokens.
@@ -166,9 +168,9 @@ class CliParser(context: Context) {
 
         if (isAssignment(tokens)) {
             val parts = tokens.first().split('=')
-            return Line.Assignment(parts[0], parts[1])
+            return Assignment(parts[0], parts[1])
         }
 
-        return Line.Pipeline(tokens.map{ parseCommand(it) })
+        return Pipeline(tokens.map{ parseCommand(it) })
     }
 }
