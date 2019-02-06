@@ -1,5 +1,6 @@
 package ru.hse.cli.parser
 
+import ru.hse.cli.Context
 import ru.hse.cli.Line
 import ru.hse.cli.commands.CliCommand
 import ru.hse.cli.commands.factory.CliCommandFactory
@@ -9,9 +10,10 @@ import java.lang.StringBuilder
 
 /*
     Class for parsing lines from command line.
-    Uses context for storing variables.
+    Uses vars for storing variables.
  */
-class CliParser(private val context: Map<String, String>) {
+class CliParser(context: Context) {
+    val vars = context.vars
 
     /*
         Expands unescaped variables in tokens.
@@ -30,7 +32,7 @@ class CliParser(private val context: Map<String, String>) {
                 '\"' -> {
                     if (inDollar) {
                         val key = token.substring(startDollar, i)
-                        result.append(context.getOrDefault(key, ""))
+                        result.append(vars.getOrDefault(key, ""))
                         inDollar = false
                     }
 
@@ -43,7 +45,7 @@ class CliParser(private val context: Map<String, String>) {
                 '\'' -> {
                     if (inDollar) {
                         val key = token.substring(startDollar, i)
-                        result.append(context.getOrDefault(key, ""))
+                        result.append(vars.getOrDefault(key, ""))
                         inDollar = false
                     }
 
@@ -57,7 +59,7 @@ class CliParser(private val context: Map<String, String>) {
                     if (!escapedSingle) {
                         if (inDollar) {
                             val key = token.substring(startDollar, i)
-                            result.append(context.getOrDefault(key, ""))
+                            result.append(vars.getOrDefault(key, ""))
                         }
                         inDollar = true
                         startDollar = i + 1
@@ -72,7 +74,7 @@ class CliParser(private val context: Map<String, String>) {
                 else -> {
                     if (inDollar) {
                         val key = token.substring(startDollar, i)
-                        result.append(context.getOrDefault(key, ""))
+                        result.append(vars.getOrDefault(key, ""))
                         inDollar = false
                     }
                     result.append(c)
@@ -82,7 +84,7 @@ class CliParser(private val context: Map<String, String>) {
         }
         if (inDollar) {
             val key = token.substring(startDollar, token.length)
-            result.append(context.getOrDefault(key, ""))
+            result.append(vars.getOrDefault(key, ""))
         }
         if (escapedDouble or escapedSingle)
             throw QuotesNotClosedException()

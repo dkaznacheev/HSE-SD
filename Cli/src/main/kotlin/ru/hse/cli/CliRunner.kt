@@ -12,14 +12,14 @@ import java.io.PrintStream
 class CliRunner(input: InputStream, private val output: PrintStream) {
 
     private val reader = BufferedReader(InputStreamReader(input))
-    private val context = mutableMapOf<String, String>()
+    private val context = Context(mutableMapOf(), System.getProperty("user.dir"))
     private val parser = CliParser(context)
 
     /*
 
      */
     private fun runAssignment(variable: String, value: String) {
-        context[variable] = value
+        context.vars[variable] = value
     }
 
     /*
