@@ -85,4 +85,40 @@ class CliRunnerTest {
     fun presentationTest03() {
         assertEquals("       1       1       3\n", executeCommand("echo 123 | wc"))
     }
+
+    @Test
+    fun grepTest01() {
+        assertEquals("a\n", executeCommand("echo abc | grep a"))
+    }
+
+    @Test
+    fun grepTest02() {
+        val tmpFile = createTempFile()
+        tmpFile.writeText("abc\n" +
+                "d\n" +
+                "ba\n" +
+                "c\n")
+        tmpFile.deleteOnExit()
+        assertEquals("abc\n" +
+                "d\n" +
+                "a\n" +
+                "c\n", executeCommand("cat ${tmpFile.absoluteFile}  | grep a -A 1"))
+    }
+
+    @Test
+    fun grepTest03() {
+        val tmpFile = createTempFile()
+        tmpFile.writeText("bab a b")
+        tmpFile.deleteOnExit()
+        assertEquals("a\n", executeCommand("cat ${tmpFile.absoluteFile}  | grep a -w"))
+    }
+
+    @Test
+    fun grepTest04() {
+        val tmpFile = createTempFile()
+        tmpFile.writeText("caseInsensitive")
+        tmpFile.deleteOnExit()
+        assertEquals("caseInsensitive\n",
+            executeCommand("cat ${tmpFile.absoluteFile}  | grep CASEINSENSITIVE -i"))
+    }
 }
