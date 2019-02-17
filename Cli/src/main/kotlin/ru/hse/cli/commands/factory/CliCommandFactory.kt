@@ -6,6 +6,9 @@ import ru.hse.cli.commands.EchoCommand.Companion.createEchoCommand
 import ru.hse.cli.commands.ExitCommand.Companion.createExitCommand
 import ru.hse.cli.commands.ExternalCommand.Companion.createExternalCommand
 import ru.hse.cli.commands.WcCommand.Companion.createWcCommand
+import ru.hse.cli.commands.LsCommand.Companion.createLsCommand
+import ru.hse.cli.commands.CdCommand.Companion.createCdCommand
+import ru.hse.cli.commands.PwdCommand.Companion.createPwdCommand
 
 object CliCommandFactory {
 
@@ -14,7 +17,10 @@ object CliCommandFactory {
         "cat" to ::createCatCommand,
         "echo" to ::createEchoCommand,
         "exit" to ::createExitCommand,
-        "wc" to ::createWcCommand
+        "wc" to ::createWcCommand,
+        "ls" to ::createLsCommand,
+        "cd" to ::createCdCommand,
+        "pwd" to ::createPwdCommand
     )
 
     //factory method for creating commands
