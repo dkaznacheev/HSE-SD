@@ -116,24 +116,25 @@ class CliRunnerTest {
     @Test
     fun testCdWithArgument() {
         val pwd = executeCommand("pwd").trim()
-        assertEquals("\n", executeCommand("cd src"))
+        assertEquals("", executeCommand("cd src").trim())
         assertEquals(Paths.get(pwd, "src").toString(), executeCommand("pwd").trim())
     }
 
     @Test
     fun testCdWithoutArguments() {
-        assertEquals("\n", executeCommand("cd"))
+        assertEquals("", executeCommand("cd").trim())
         assertEquals(System.getProperty("user.home"), executeCommand("pwd").trim())
     }
 
     @Test
     fun testLsWithoutArguments() {
         executeCommand("cd src")
-        assertEquals("main\ntest\n", executeCommand("ls"))
+        val expected = listOf("main", "test").joinToString(System.lineSeparator())
+        assertEquals(expected, executeCommand("ls").trim())
     }
 
     @Test
     fun testLsWithArgument() {
-        assertEquals("kotlin\n", executeCommand("ls ${Paths.get("src", "main")}"))
+        assertEquals("kotlin", executeCommand("ls ${Paths.get("src", "main")}").trim())
     }
 }
