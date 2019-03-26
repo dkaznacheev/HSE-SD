@@ -1,9 +1,7 @@
 package ru.hse.cli.commands
 
 import ru.hse.cli.Context
-import ru.hse.cli.parser.exceptions.IsDirectoryException
-import ru.hse.cli.parser.exceptions.NoSuchFileException
-import java.io.File
+import ru.hse.cli.util.FileReadService.readFiles
 
 /**
  * cat concatenates all files from arguments or redirects input to output if there are no arguments.
@@ -13,17 +11,10 @@ class CatCommand private constructor(args: List<String>) : CliCommand(args) {
     override fun getName() = "cat"
 
     override fun execute(input: String?, context: Context): String {
-        if (args.isNotEmpty())
-            return args.joinToString(System.lineSeparator()) { name ->
-                val file = File(name)
-                when {
-                    file.isFile -> return@joinToString file.readLines().joinToString(System.lineSeparator())
-                    file.isDirectory -> throw IsDirectoryException(name, getName())
-                    else -> throw NoSuchFileException(name, getName())
-                }
-            }
+        return if (args.isNotEmpty())
+            readFiles(getName(), args)
         else
-            return input ?: ""
+            input ?: ""
     }
 
     companion object {
