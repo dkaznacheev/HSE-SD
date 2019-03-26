@@ -88,4 +88,9 @@ class CliRunnerTest {
     fun presentationTest03() {
         assertEquals("       1       1       3$sep", executeCommand("echo 123 | wc"))
     }
+
+    @Test
+    fun pwdTest() {
+        assertEquals(System.getProperty("user.dir") + System.lineSeparator(), executeCommand("pwd"))
+    }
 }
