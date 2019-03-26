@@ -2,7 +2,10 @@ package ru.hse.cli.commands
 
 import ru.hse.cli.Context
 
-//exit command, closes the command line if called
+/**
+ * exit command closes the command line if called.
+ * @property args list of arguments
+ */
 class ExitCommand private constructor(args: List<String>) : CliCommand(args) {
     override fun getName() = "exit"
 

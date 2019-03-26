@@ -10,15 +10,17 @@ import ru.hse.cli.parser.exceptions.EmptyCommandException
 import ru.hse.cli.parser.exceptions.QuotesNotClosedException
 import java.lang.StringBuilder
 
-/*
-    Class for parsing lines from command line.
-    Uses vars for storing variables.
+/**
+ * Class for parsing lines from command line.
+ * Uses vars for storing variables.
+ * @param context execution context
  */
 class CliParser(context: Context) {
     private val vars = context.vars
 
-    /*
-        Expands unescaped variables in tokens.
+    /**
+     * Expands unescaped variables in tokens.
+     * @param token string token to expand
      */
     private fun expand(token: String): String {
         val result = StringBuilder()
@@ -93,8 +95,9 @@ class CliParser(context: Context) {
         return result.toString()
     }
 
-    /*
-        Checks whether the line is an assignment
+    /**
+     * Checks whether the line is an assignment.
+     * @param tokens a line to check
      */
     private fun isAssignment(tokens: List<String>): Boolean {
         if (tokens.size != 1)
@@ -105,9 +108,10 @@ class CliParser(context: Context) {
         return true
     }
 
-    /*
-        Splits line into tokens by unescaped pipe symbols.
-        Example: (echo "|" | cat) produces [echo "|", cat]
+    /**
+     * Splits line into tokens by unescaped pipe symbols.
+     * Example: (echo "|" | cat) produces [echo "|", cat]
+     * @param line string line to split
      */
     private fun splitByUnescaped(line: String): List<String> {
         var escapedSingle = false
@@ -147,8 +151,9 @@ class CliParser(context: Context) {
         return result
     }
 
-    /*
-        Parses a command from a token.
+    /**
+     * Parses a command from a token.
+     * @param input a token to parse
      */
     private fun parseCommand(input: String): CliCommand {
         val tokens = input.trim().split(' ')
@@ -159,8 +164,9 @@ class CliParser(context: Context) {
         return CliCommandFactory.createCliCommand(name, args)
     }
 
-    /*
-        Parses a token and returns either an assignment or a list of commands in a pipeline
+    /**
+     * Parses a token and returns either an assignment or a list of commands in a pipeline
+     * @param line a token to parse
      */
     fun parseLine(line: String): Line {
         val tokens = splitByUnescaped(line)

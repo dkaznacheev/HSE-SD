@@ -14,8 +14,8 @@ class CliRunner(input: InputStream, private val output: PrintStream) {
     private val context = Context(mutableMapOf(), System.getProperty("user.dir"))
     private val parser = CliParser(context)
 
-    /*
-        Runs the command line cycle.
+    /**
+     * Runs the command line cycle.
      */
     fun run() {
         var line = reader.readLine()

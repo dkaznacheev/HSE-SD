@@ -3,7 +3,10 @@ package ru.hse.cli.commands
 import ru.hse.cli.Context
 import java.io.File
 
-// cat concatenates all files from arguments or redirects input to output if there are no arguments
+/**
+ * cat concatenates all files from arguments or redirects input to output if there are no arguments.
+ * @property args list of arguments
+  */
 class CatCommand private constructor(args: List<String>) : CliCommand(args) {
     override fun getName() = "cat"
 
