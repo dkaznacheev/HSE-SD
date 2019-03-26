@@ -2,6 +2,7 @@ package ru.hse.cli.commands
 
 import ru.hse.cli.Context
 import ru.hse.cli.util.FileReadService.readFiles
+import java.util.*
 
 /**
  * wc command counts lines, words and bytes of input or a file from arguments if there was no input.
@@ -12,8 +13,8 @@ class WcCommand private constructor(args: List<String>) : CliCommand(args) {
 
     override fun execute(input: String?, context: Context): String {
         val wcInput = input ?: readFiles(getName(), args)
-        val newlines = wcInput.count { it == '\n' } + 1
-        val words = wcInput.replace('\n', ' ').split(' ').size
+        val newlines = wcInput.split(Regex("(\r\n)|\n|\r")).size
+        val words = StringTokenizer(wcInput).countTokens()
         val bytes = wcInput.toByteArray().size
         return  "$newlines".padStart(8) +
                 "$words".padStart(8) +
