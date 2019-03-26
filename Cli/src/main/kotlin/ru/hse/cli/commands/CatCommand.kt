@@ -9,10 +9,10 @@ class CatCommand private constructor(args: List<String>) : CliCommand(args) {
 
     override fun execute(input: String?, context: Context): String {
         if (args.isNotEmpty())
-            return args.joinToString("\n") { name ->
+            return args.joinToString(System.lineSeparator()) { name ->
                 val file = File(name)
                 when {
-                    file.isFile -> return@joinToString file.readLines().joinToString("\n")
+                    file.isFile -> return@joinToString file.readLines().joinToString(System.lineSeparator())
                     file.isDirectory -> return@joinToString "cat: $name/: is a directory"
                     else -> return@joinToString "cat: $name: no such file or directory"
                 }
