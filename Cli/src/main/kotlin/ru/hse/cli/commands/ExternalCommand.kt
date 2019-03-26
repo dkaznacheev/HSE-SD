@@ -4,7 +4,10 @@ import ru.hse.cli.Context
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
-//external command call
+/**
+ * External command call.
+ * @property args list of arguments
+ */
 class ExternalCommand private constructor(args: List<String>) : CliCommand(args) {
     override fun getName() = ""
 

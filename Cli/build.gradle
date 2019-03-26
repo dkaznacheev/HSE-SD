@@ -9,6 +9,11 @@ repositories {
     mavenCentral()
 }
 
+jar {
+    manifest { attributes 'Main-Class': "ru.hse.cli.Main" }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
