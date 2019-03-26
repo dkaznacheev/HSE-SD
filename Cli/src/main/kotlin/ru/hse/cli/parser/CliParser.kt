@@ -156,6 +156,9 @@ class CliParser(context: Context) {
      * @param input a token to parse
      */
     private fun parseCommand(input: String): CliCommand {
+        if (input.isEmpty()) {
+            throw EmptyCommandException()
+        }
         val tokens = input.trim().split(' ')
         if (tokens.isEmpty())
             throw EmptyCommandException()

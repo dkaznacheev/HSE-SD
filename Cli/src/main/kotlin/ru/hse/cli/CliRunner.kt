@@ -34,9 +34,4 @@ class CliRunner(input: InputStream, private val output: PrintStream) {
         }
 
     }
-
-}
-
-fun main() {
-    CliRunner(System.`in`, System.out).run()
 }

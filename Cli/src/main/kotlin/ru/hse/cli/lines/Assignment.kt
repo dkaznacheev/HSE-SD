@@ -5,7 +5,7 @@ import java.io.PrintStream
 
 /**
  * Assignment line in CLI.
- * @param variable name of the variable
+ * @param variable filename of the variable
  * @param value variable's new value
  */
 class Assignment(private val variable: String, private val value: String): Line() {

@@ -1,6 +1,8 @@
 package ru.hse.cli.commands
 
 import ru.hse.cli.Context
+import ru.hse.cli.parser.exceptions.IsDirectoryException
+import ru.hse.cli.parser.exceptions.NoSuchFileException
 import java.io.File
 
 /**
@@ -16,8 +18,8 @@ class CatCommand private constructor(args: List<String>) : CliCommand(args) {
                 val file = File(name)
                 when {
                     file.isFile -> return@joinToString file.readLines().joinToString(System.lineSeparator())
-                    file.isDirectory -> return@joinToString "cat: $name/: is a directory"
-                    else -> return@joinToString "cat: $name: no such file or directory"
+                    file.isDirectory -> throw IsDirectoryException(name, getName())
+                    else -> throw NoSuchFileException(name, getName())
                 }
             }
         else
