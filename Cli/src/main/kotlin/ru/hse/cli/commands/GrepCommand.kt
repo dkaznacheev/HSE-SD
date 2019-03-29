@@ -5,6 +5,7 @@ import org.apache.commons.cli.DefaultParser
 import org.apache.commons.cli.Options
 import ru.hse.cli.Context
 import ru.hse.cli.commands.Util.loadFiles
+import ru.hse.cli.parser.exceptions.NegativeLinesGrepException
 import ru.hse.cli.util.StringUtils.getLines
 import java.util.*
 
@@ -35,6 +36,10 @@ class GrepCommand private constructor(args: List<String>) : CliCommand(args) {
         val afterMatchLines = if (cmd.hasOption("A")) {
             cmd.getOptionValue("A").toIntOrNull() ?: 0
         } else 0
+
+        if (afterMatchLines < 0) {
+            throw NegativeLinesGrepException(afterMatchLines)
+        }
 
         val argList = cmd.argList
         if (argList.isEmpty())
