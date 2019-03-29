@@ -8,6 +8,11 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.PrintStream
 
+/**
+ * Class for running the command line interface.
+ * @param input input stream for the cli runner
+ * @param output output stream for the cli runner
+ */
 class CliRunner(input: InputStream, private val output: PrintStream) {
 
     private val reader = BufferedReader(InputStreamReader(input))

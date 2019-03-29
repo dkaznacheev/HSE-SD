@@ -9,6 +9,12 @@ import java.io.PrintStream
  * @param value variable's new value
  */
 class Assignment(private val variable: String, private val value: String): Line() {
+
+    /**
+     * Executes the line in a given context.
+     * @param context execution context
+     * @param output PrintStream to write to
+     */
     override fun run(context: Context, output: PrintStream): Boolean {
         context.vars[variable] = value
         return false

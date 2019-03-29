@@ -12,6 +12,12 @@ import java.io.PrintStream
  * @param commands list of commands
  */
 class Pipeline(private val commands: List<CliCommand>) : Line() {
+
+    /**
+     * Executes the line in a given context.
+     * @param context execution context
+     * @param output PrintStream to write to
+     */
     override fun run(context: Context, output: PrintStream): Boolean {
         if (commands.size == 1 && commands.first().getName() == "exit")
             return true

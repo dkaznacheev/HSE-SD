@@ -9,8 +9,16 @@ import java.util.concurrent.TimeUnit
  * @property args list of arguments
  */
 class ExternalCommand private constructor(args: List<String>) : CliCommand(args) {
+    /**
+     * Gets the command's name.
+     */
     override fun getName() = ""
 
+    /**
+     * Executes the function with given input in given context.
+     * @param input command input
+     * @param context execution context
+     */
     override fun execute(input: String?, context: Context): String {
         return try {
             val proc = ProcessBuilder(args)
@@ -29,6 +37,10 @@ class ExternalCommand private constructor(args: List<String>) : CliCommand(args)
     }
 
     companion object {
+        /**
+         * Factory method for creating this command.
+         * @param args command arguments
+         */
         fun createExternalCommand(args: List<String>) = ExternalCommand(args)
     }
 }
