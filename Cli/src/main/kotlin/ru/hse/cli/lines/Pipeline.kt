@@ -1,10 +1,11 @@
 package ru.hse.cli.lines
 
+import org.apache.commons.cli.UnrecognizedOptionException
 import ru.hse.cli.Context
 import ru.hse.cli.commands.CliCommand
 import ru.hse.cli.parser.exceptions.ExitException
 import ru.hse.cli.parser.exceptions.IsDirectoryException
-import ru.hse.cli.parser.exceptions.NegativeLinesGrepException
+import ru.hse.cli.parser.exceptions.LineNumberGrepException
 import ru.hse.cli.parser.exceptions.NoSuchFileException
 import java.io.PrintStream
 
@@ -29,8 +30,12 @@ class Pipeline(private val commands: List<CliCommand>) : Line() {
                 buffer = command.execute(buffer, context)
             } catch (e: Throwable) {
                 when (e) {
-                    is NegativeLinesGrepException -> {
-                        output.println("grep: can't have ${e.number} lines after match")
+                    is UnrecognizedOptionException -> {
+                        output.println("grep: unrecognized option")
+                        return false
+                    }
+                    is LineNumberGrepException -> {
+                        output.println("grep: incorrect \"lines after match\" argument value")
                         return false
                     }
                     is IsDirectoryException ->  {

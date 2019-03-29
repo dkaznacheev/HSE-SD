@@ -5,7 +5,7 @@ import org.apache.commons.cli.DefaultParser
 import org.apache.commons.cli.Options
 import ru.hse.cli.Context
 import ru.hse.cli.commands.Util.loadFiles
-import ru.hse.cli.parser.exceptions.NegativeLinesGrepException
+import ru.hse.cli.parser.exceptions.LineNumberGrepException
 import ru.hse.cli.util.StringUtils.getLines
 import java.util.*
 
@@ -22,7 +22,6 @@ class GrepCommand private constructor(args: List<String>) : CliCommand(args) {
         options.addOption("h", false, "show help")
 
         val parser = DefaultParser()
-        //println(args)
         val cmd = parser.parse(options, args.toTypedArray())
         if (!allValidFlags(cmd, options)) {
             return usageLine
@@ -34,11 +33,11 @@ class GrepCommand private constructor(args: List<String>) : CliCommand(args) {
         val caseSensitive = !cmd.hasOption("i")
         val wholeWord = cmd.hasOption("w")
         val afterMatchLines = if (cmd.hasOption("A")) {
-            cmd.getOptionValue("A").toIntOrNull() ?: 0
+            cmd.getOptionValue("A").toIntOrNull() ?: throw LineNumberGrepException()
         } else 0
 
         if (afterMatchLines < 0) {
-            throw NegativeLinesGrepException(afterMatchLines)
+            throw LineNumberGrepException()
         }
 
         val argList = cmd.argList
