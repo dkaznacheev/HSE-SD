@@ -172,9 +172,9 @@ class CliParser(context: Context) {
      * @param line a token to parse
      */
     fun parseLine(line: String): Line {
+
         val tokens = splitByUnescaped(line)
             .map{ expand(it) }
-
         if (isAssignment(tokens)) {
             val parts = tokens.first().split('=')
             return Assignment(parts[0], parts[1])

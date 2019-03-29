@@ -1,11 +1,11 @@
 package ru.hse.cli.commands
 
+import org.apache.commons.cli.CommandLine
 import org.apache.commons.cli.DefaultParser
 import org.apache.commons.cli.Options
 import ru.hse.cli.Context
 import ru.hse.cli.commands.Util.loadFiles
 import ru.hse.cli.util.StringUtils.getLines
-import java.lang.Math.max
 import java.util.*
 
 class GrepCommand private constructor(args: List<String>) : CliCommand(args) {
@@ -21,8 +21,11 @@ class GrepCommand private constructor(args: List<String>) : CliCommand(args) {
         options.addOption("h", false, "show help")
 
         val parser = DefaultParser()
+        //println(args)
         val cmd = parser.parse(options, args.toTypedArray())
-
+        if (!allValidFlags(cmd, options)) {
+            return usageLine
+        }
         if (cmd.hasOption("h")) {
             return usageLine
         }
@@ -42,7 +45,6 @@ class GrepCommand private constructor(args: List<String>) : CliCommand(args) {
             loadFiles(listOf(filename), context)
         } else input ?: return usageLine
 
-        println(argList)
         var pattern = argList.first()
 
         if (wholeWord) {
@@ -69,6 +71,14 @@ class GrepCommand private constructor(args: List<String>) : CliCommand(args) {
         }
 
         return result.toString()
+    }
+
+    private fun allValidFlags(cmd: CommandLine, options: Options): Boolean {
+        cmd.options.forEach {
+            if (!options.hasOption(it.opt))
+                return false
+        }
+        return true
     }
 
     companion object {

@@ -129,10 +129,4 @@ class CliRunnerTest {
         assertEquals("caseInsensitive${sep}",
             executeCommand("cat ${tmpFile.absoluteFile}  | grep CASEINSENSITIVE -i"))
     }
-
-    @Test
-    fun grepTest05() {
-        assertEquals("b c",
-            executeCommand("echo a b c | grep -w \"b c\""))
-    }
 }
