@@ -96,29 +96,29 @@ class CliRunnerTest {
 
     @Test
     fun grepTest01() {
-        assertEquals("a\n", executeCommand("echo abc | grep a"))
+        assertEquals("abc${sep}", executeCommand("echo abc | grep a"))
     }
 
     @Test
     fun grepTest02() {
         val tmpFile = createTempFile()
-        tmpFile.writeText("abc\n" +
-                "d\n" +
-                "ba\n" +
-                "c\n")
+        tmpFile.writeText("abc${sep}" +
+                "d${sep}" +
+                "ba${sep}" +
+                "c${sep}")
         tmpFile.deleteOnExit()
-        assertEquals("abc\n" +
-                "d\n" +
-                "a\n" +
-                "c\n", executeCommand("cat ${tmpFile.absoluteFile}  | grep a -A 1"))
+        assertEquals("abc${sep}" +
+                "d${sep}" +
+                "ba${sep}" +
+                "c${sep}", executeCommand("cat ${tmpFile.absoluteFile}  | grep a -A 1"))
     }
 
     @Test
     fun grepTest03() {
         val tmpFile = createTempFile()
-        tmpFile.writeText("bab a b")
+        tmpFile.writeText("bab${sep}a${sep}b")
         tmpFile.deleteOnExit()
-        assertEquals("a\n", executeCommand("cat ${tmpFile.absoluteFile}  | grep a -w"))
+        assertEquals("a${sep}", executeCommand("cat ${tmpFile.absoluteFile}  | grep a -w"))
     }
 
     @Test
@@ -126,7 +126,13 @@ class CliRunnerTest {
         val tmpFile = createTempFile()
         tmpFile.writeText("caseInsensitive")
         tmpFile.deleteOnExit()
-        assertEquals("caseInsensitive\n",
+        assertEquals("caseInsensitive${sep}",
             executeCommand("cat ${tmpFile.absoluteFile}  | grep CASEINSENSITIVE -i"))
+    }
+
+    @Test
+    fun grepTest05() {
+        assertEquals("b c",
+            executeCommand("echo a b c | grep -w \"b c\""))
     }
 }

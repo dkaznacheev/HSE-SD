@@ -6,7 +6,6 @@ class PwdCommand private constructor(args: List<String>) : CliCommand(args) {
     override fun getName() = "pwd"
 
     override fun execute(input: String?, context: Context): String {
-        println("!")
         return context.currentDir
     }
 

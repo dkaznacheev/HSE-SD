@@ -4,7 +4,9 @@ import org.apache.commons.cli.DefaultParser
 import org.apache.commons.cli.Options
 import ru.hse.cli.Context
 import ru.hse.cli.commands.Util.loadFiles
+import ru.hse.cli.util.StringUtils.getLines
 import java.lang.Math.max
+import java.util.*
 
 class GrepCommand private constructor(args: List<String>) : CliCommand(args) {
 
@@ -12,7 +14,7 @@ class GrepCommand private constructor(args: List<String>) : CliCommand(args) {
 
     override fun execute(input: String?, context: Context): String {
         val options = Options()
-
+        val usageLine = USAGE.replace("\n", System.lineSeparator())
         options.addOption("i", false, "case insensitive")
         options.addOption("w", false, "whole word search")
         options.addOption("A", true, "print n lines after match")
@@ -22,7 +24,7 @@ class GrepCommand private constructor(args: List<String>) : CliCommand(args) {
         val cmd = parser.parse(options, args.toTypedArray())
 
         if (cmd.hasOption("h")) {
-            return USAGE
+            return usageLine
         }
 
         val caseSensitive = !cmd.hasOption("i")
@@ -33,40 +35,40 @@ class GrepCommand private constructor(args: List<String>) : CliCommand(args) {
 
         val argList = cmd.argList
         if (argList.isEmpty())
-            return USAGE
+            return usageLine
 
         val grepInput = if (argList.size > 1) {
             val filename = argList[1]
             loadFiles(listOf(filename), context)
-        } else input ?: return USAGE
+        } else input ?: return usageLine
 
+        println(argList)
         var pattern = argList.first()
+
         if (wholeWord) {
-            pattern = "(?<!\\p{L})$pattern(?!\\p{L})"
+            pattern = "\\b$pattern\\b"
         }
         if (!caseSensitive) {
             pattern = "(?i)$pattern"
         }
 
-        val result = pattern.toRegex().findAll(grepInput)
+        val regex = pattern.toRegex()
+        val inputLines = getLines(grepInput)
+        val isMatched = Array(inputLines.size){ false }
+        val result = StringJoiner(System.lineSeparator())
 
-        if (afterMatchLines == 0) {
-            return result.map { it.value }.joinToString("\n")
+        for ((i, line) in inputLines.withIndex()) {
+            if (regex.containsMatchIn(line)) {
+                for (j in i..(i + afterMatchLines))
+                    isMatched[j] = true
+            }
+
+            if (isMatched[i]) {
+                result.add(line)
+            }
         }
 
-        val linebreaks: List<Int> = grepInput
-            .mapIndexedNotNull{ i, c -> if (c == '\n') i else null }.plus(grepInput.length - 1)
-
-        return result
-            .map { res ->
-                val start = res.range.start
-                val end = res.range.endInclusive
-                val nextLineBreak = linebreaks
-                    .filter { it > start }
-                    .getOrElse(afterMatchLines) { linebreaks.last() }
-                return@map grepInput.substring(start..max(nextLineBreak, end))
-            }
-            .joinToString("")
+        return result.toString()
     }
 
     companion object {

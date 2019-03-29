@@ -2,6 +2,7 @@ package ru.hse.cli.commands
 
 import ru.hse.cli.Context
 import ru.hse.cli.util.FileReadService.readFiles
+import ru.hse.cli.util.StringUtils.getLines
 import java.util.*
 
 /**
@@ -13,7 +14,7 @@ class WcCommand private constructor(args: List<String>) : CliCommand(args) {
 
     override fun execute(input: String?, context: Context): String {
         val wcInput = input ?: readFiles(getName(), args)
-        val newlines = wcInput.split(Regex("(\r\n)|\n|\r")).size
+        val newlines = getLines(wcInput).size
         val words = StringTokenizer(wcInput).countTokens()
         val bytes = wcInput.toByteArray().size
         return  "$newlines".padStart(8) +
