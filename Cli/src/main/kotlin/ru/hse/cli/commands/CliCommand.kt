@@ -13,5 +13,9 @@ abstract class CliCommand(protected val args: List<String>) {
      * @param context execution context
      */
     abstract fun execute(input: String? = null, context: Context): String
+
+    /**
+     * Gets the command's name.
+     */
     abstract fun getName(): String
 }
