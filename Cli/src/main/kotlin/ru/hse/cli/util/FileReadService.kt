@@ -15,7 +15,7 @@ object FileReadService {
         return fileNames.joinToString(System.lineSeparator()) { name ->
             val file = File(name)
             when {
-                file.isFile -> return@joinToString file.readLines().joinToString(System.lineSeparator())
+                file.isFile -> return@joinToString file.readText()
                 file.isDirectory -> throw IsDirectoryException(name, commandName)
                 else -> throw NoSuchFileException(name, commandName)
             }

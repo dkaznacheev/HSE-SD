@@ -4,6 +4,7 @@ import ru.hse.cli.CliRunner
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
+import java.util.*
 
 class CliRunnerTest {
     private val sep = System.lineSeparator()
@@ -36,7 +37,7 @@ class CliRunnerTest {
         val tmpFile = createTempFile()
         tmpFile.writeText("a${sep}bbbb$sep")
         tmpFile.deleteOnExit()
-        assertEquals("a${sep}bbbb$sep", executeCommand("cat ${tmpFile.absoluteFile}"))
+        assertEquals("a${sep}bbbb$sep$sep", executeCommand("cat ${tmpFile.absoluteFile}"))
     }
 
     @Test
@@ -48,9 +49,13 @@ class CliRunnerTest {
     @Test
     fun testWc() {
         val tmpFile = createTempFile()
-        tmpFile.writeText("a${sep}bbbb$sep")
+        val text = "a${sep}bbbb$sep"
+        tmpFile.writeText(text)
         tmpFile.deleteOnExit()
-        assertEquals("       2       2       6$sep", executeCommand(
+        val newlines = text.split(Regex("(\r\n)|\n|\r")).size
+        val words = StringTokenizer(text).countTokens()
+        val bytes = text.toByteArray().size
+        assertEquals("       $newlines       $words       $bytes$sep", executeCommand(
             "cat ${tmpFile.absoluteFile} | wc"))
     }
 
@@ -82,11 +87,6 @@ class CliRunnerTest {
     @Test
     fun presentationTest02() {
         assertEquals("", executeCommand("x=exit$sep\$x"))
-    }
-
-    @Test
-    fun presentationTest03() {
-        assertEquals("       1       1       3$sep", executeCommand("echo 123 | wc"))
     }
 
     @Test
