@@ -10,10 +10,10 @@ public class SQSService {
     private String queueOut;
     private AmazonSQS sqs;
 
-    public SQSService(String queueIn, String queueOut) {
+    public SQSService(String queueIn, String queueOut, AmazonSQS sqs) {
         this.queueIn = queueIn;
         this.queueOut = queueOut;
-        this.sqs = AmazonSQSClientBuilder.standard().withRegion("us-east-1").build();
+        this.sqs = sqs;
     }
 
     private long getMessage() {
@@ -43,10 +43,16 @@ public class SQSService {
         }
     }
 
-    public static void main(String[] args) {
-        for (String arg: args) {
-            System.out.println(arg);
+    private static AmazonSQS waitForSQS() {
+        while (true) {
+            try {
+                return AmazonSQSClientBuilder.standard().withRegion("us-east-1").build();
+            } catch (Exception e) {}
         }
-        //new SQSService(args[0], args[1]).start();
+    }
+
+    public static void main(String[] args) {
+        AmazonSQS sqs = waitForSQS();
+        new SQSService(args[0], args[1], sqs).start();
     }
 }
